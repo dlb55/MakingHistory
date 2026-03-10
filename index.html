@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Making History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest: #2d4a2e;
+  --forest-deep: #1a2e1b;
+  --forest-light: #3d6b3f;
+  --bark: #5c3d2e;
+  --bark-light: #8b6543;
+  --bark-dark: #3a2518;
+  --sand: #d4c5a0;
+  --sand-light: #e8dfc6;
+  --sand-pale: #f2ece0;
+  --cream: #faf6ee;
+  --gold: #c4982a;
+  --gold-light: #e0b844;
+  --orange: #d4853a;
+  --pending-orange: #e8923a;
+  --visited-green: #2d6b3f;
+  --state-gray: #d1d5d0;
+  --state-border: #a0a8a0;
+  --text-dark: #1a1a18;
+  --text-mid: #4a4a44;
+  --text-light: #8a8a80;
+  --danger: #8b3a3a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+/* ── NAVIGATION ── */
+.site-header {
+  background: var(--forest-deep);
+  border-bottom: 3px solid var(--bark-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.site-logo {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: var(--sand-light);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 16px 0;
+}
+
+.site-logo span {
+  color: var(--gold);
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  color: var(--sand);
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 20px 24px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s, background 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.nav-tab:hover {
+  color: var(--gold-light);
+  background: rgba(255,255,255,0.05);
+}
+
+.nav-tab.active {
+  color: var(--gold);
+}
+
+.nav-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 3px 3px 0 0;
+}
+
+/* ── MAIN CONTENT ── */
+.page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── HOME TAB ── */
+.hero-banner {
+  background: linear-gradient(135deg, var(--forest-deep) 0%, var(--forest) 40%, var(--bark-dark) 100%);
+  border-radius: 12px;
+  margin: 32px 0;
+  padding: 40px 48px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 280px;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(45,75,45,0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(92,61,46,0.3) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  width: 180px;
+  height: auto;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+}
+
+.hero-center {
+  text-align: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-event-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 2.8rem;
+  color: var(--sand-light);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  margin-bottom: 8px;
+}
+
+.hero-event-location {
+  font-size: 1.1rem;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+.countdown-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.countdown-unit {
+  text-align: center;
+}
+
+.countdown-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  line-height: 1;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.countdown-label {
+  font-size: 0.7rem;
+  color: var(--sand);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.countdown-separator {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  color: var(--bark-light);
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+/* ── MAP SECTION ── */
+.map-section {
+  margin: 40px 0 60px;
+}
+
+.section-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--forest-deep);
+  margin-bottom: 8px;
+}
+
+.section-sub {
+  color: var(--text-mid);
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+.map-container {
+  background: white;
+  border-radius: 12px;
+  border: 2px solid var(--sand);
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.map-svg-wrap {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.map-svg-wrap svg {
+  width: 100%;
+  height: auto;
+}
+
+.map-legend {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--sand);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+}
+
+.legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+/* ── MAP STATE TOOLTIPS ── */
+.state-path {
+  transition: opacity 0.2s;
+  cursor: default;
+}
+
+.state-path.visited, .state-path.pending {
+  cursor: pointer;
+}
+
+.state-path.visited:hover, .state-path.pending:hover {
+  opacity: 0.85;
+}
+
+.map-tooltip {
+  position: absolute;
+  background: var(--forest-deep);
+  color: var(--sand-light);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: none;
+}
+
+.map-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--forest-deep);
+}
+
+/* ── PAST HISTORY MAKERS TAB ── */
+.history-section {
+  padding: 32px 0 60px;
+}
+
+.no-data-msg {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+.no-data-msg .icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.year-card {
+  background: white;
+  border-radius: 12px;
+  border: 2px solid var(--sand);
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.year-card-header {
+  background: linear-gradient(135deg, var(--forest-deep), var(--forest));
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.year-card-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--sand-light);
+}
+
+.year-card-location {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.awards-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.awards-table th {
+  text-align: left;
+  padding: 14px 28px;
+  background: var(--sand-pale);
+  color: var(--text-mid);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--sand);
+}
+
+.awards-table td {
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--sand-pale);
+  font-size: 0.95rem;
+}
+
+.awards-table tr:last-child td {
+  border-bottom: none;
+}
+
+.awards-table .award-name {
+  font-weight: 600;
+  color: var(--forest-deep);
+}
+
+.awards-table .award-winner {
+  color: var(--bark);
+  font-weight: 600;
+}
+
+.award-icon {
+  color: var(--gold);
+  margin-right: 6px;
+}
+
+/* ── ADMIN TAB ── */
+.admin-gate {
+  max-width: 400px;
+  margin: 80px auto;
+  text-align: center;
+}
+
+.admin-gate h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--forest-deep);
+  margin-bottom: 8px;
+}
+
+.admin-gate p {
+  color: var(--text-mid);
+  margin-bottom: 24px;
+}
+
+.admin-gate input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--sand);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.admin-gate input:focus {
+  outline: none;
+  border-color: var(--forest);
+}
+
+.admin-panel {
+  padding: 32px 0 60px;
+}
+
+.admin-section {
+  background: white;
+  border-radius: 12px;
+  border: 2px solid var(--sand);
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.admin-section-header {
+  background: var(--sand-pale);
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--sand);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-section-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--forest-deep);
+}
+
+.admin-section-body {
+  padding: 24px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: flex-end;
+}
+
+.form-group {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--sand);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background: white;
+}
+
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+  border-color: var(--forest);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--forest);
+  color: white;
+}
+.btn-primary:hover { background: var(--forest-light); }
+
+.btn-gold {
+  background: var(--gold);
+  color: white;
+}
+.btn-gold:hover { background: var(--gold-light); }
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+.btn-danger:hover { background: #a04444; }
+
+.btn-outline {
+  background: none;
+  border: 2px solid var(--sand);
+  color: var(--text-mid);
+}
+.btn-outline:hover { border-color: var(--forest); color: var(--forest); }
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
+/* State management in admin */
+.state-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.state-chip {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid var(--sand);
+  background: white;
+  color: var(--text-mid);
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.state-chip.visited {
+  background: var(--visited-green);
+  color: white;
+  border-color: var(--visited-green);
+}
+
+.state-chip.pending {
+  background: var(--pending-orange);
+  color: white;
+  border-color: var(--pending-orange);
+}
+
+/* Year editor in admin */
+.admin-year-block {
+  border: 2px solid var(--sand);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.admin-year-header {
+  background: var(--sand-pale);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.admin-year-header h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--forest-deep);
+}
+
+.admin-year-body {
+  padding: 20px;
+}
+
+.admin-award-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.admin-award-row input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid var(--sand);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.admin-award-row input:focus {
+  outline: none;
+  border-color: var(--forest);
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.remove-btn:hover { background: rgba(139,58,58,0.1); }
+
+/* Export section */
+.export-section {
+  background: var(--forest-deep);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 20px;
+}
+
+.export-section h3 {
+  color: var(--sand-light);
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 8px;
+}
+
+.export-section p {
+  color: var(--sand);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.export-instructions {
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--sand);
+  line-height: 1.6;
+}
+
+.export-instructions code {
+  background: rgba(255,255,255,0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--forest);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 200;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav-inner {
+    flex-direction: column;
+    padding: 0 16px;
+  }
+  .site-logo { padding: 12px 0 4px; }
+  .nav-tab { padding: 14px 16px; font-size: 0.85rem; }
+  .hero-banner {
+    flex-direction: column;
+    padding: 24px;
+    text-align: center;
+  }
+  .hero-badge { width: 120px; }
+  .hero-badge:last-child { display: none; }
+  .hero-event-name { font-size: 1.8rem; }
+  .countdown-number { font-size: 1.8rem; }
+  .form-row { flex-direction: column; }
+  .state-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+  .year-card-header { flex-direction: column; gap: 4px; }
+  .admin-award-row { flex-direction: column; }
+  .admin-award-row input { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <div class="site-logo">Making <span>History</span></div>
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="home">Home</button>
+      <button class="nav-tab" data-tab="history">Past History Makers</button>
+      <button class="nav-tab" data-tab="admin">Admin</button>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+
+  <!-- ═══════ HOME TAB ═══════ -->
+  <div id="tab-home" class="tab-panel active">
+    <div class="hero-banner">
+      <img src="MH_Missula.jpeg" alt="Event Badge" class="hero-badge" id="heroBadgeLeft">
+      <div class="hero-center">
+        <div class="hero-event-name" id="heroEventName">Missoulapalooza</div>
+        <div class="hero-event-location" id="heroEventLocation">Missoula, MT — March 19, 2026</div>
+        <div class="countdown-row" id="countdown">
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-days">--</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-hours">--</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-min">--</div>
+            <div class="countdown-label">Min</div>
+          </div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-sec">--</div>
+            <div class="countdown-label">Sec</div>
+          </div>
+        </div>
+      </div>
+      <img src="MH_Missula.jpeg" alt="Event Badge" class="hero-badge" id="heroBadgeRight">
+    </div>
+
+    <div class="map-section">
+      <h2 class="section-heading">Where We've Made History</h2>
+      <p class="section-sub">Tracking every state the crew has conquered</p>
+      <div class="map-container" style="position:relative;">
+        <div class="map-svg-wrap" id="mapContainer"></div>
+        <div class="map-tooltip" id="mapTooltip"></div>
+        <div class="map-legend">
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:var(--visited-green)"></div>
+            History Made
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:var(--pending-orange)"></div>
+            Pending
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ PAST HISTORY MAKERS TAB ═══════ -->
+  <div id="tab-history" class="tab-panel">
+    <div class="history-section">
+      <h2 class="section-heading">Past History Makers</h2>
+      <p class="section-sub">Every year, every award, every legend</p>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ ADMIN TAB ═══════ -->
+  <div id="tab-admin" class="tab-panel">
+    <div class="admin-panel" style="padding:32px 0 60px;">
+
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h3>Manage Site Data</h3>
+        </div>
+        <div class="admin-section-body" style="text-align:center;padding:40px 24px;">
+          <p style="font-size:1.1rem;color:var(--text-mid);margin-bottom:8px;">All site content is managed through Google Sheets.</p>
+          <p style="color:var(--text-light);margin-bottom:28px;">Edit the event details, visited states, and awards directly in the spreadsheet. Changes appear on the site within a few minutes.</p>
+          <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRXZo0w3uYVd9YVD4kJ9SoAzE4zEXYwnojfE9e5nHSA_l3FqSNANPrJCJW9lu4NEYzXIdFY5sFbNlJE/pubhtml" target="_blank" class="btn btn-primary" style="font-size:1rem;padding:14px 32px;">
+            Open Google Sheet
+          </a>
+          <div style="margin-top:32px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;">
+            <h4 style="font-family:'Playfair Display',serif;color:var(--forest-deep);margin-bottom:12px;">Sheet Tabs</h4>
+            <p style="color:var(--text-mid);font-size:0.95rem;line-height:1.7;">
+              <strong>Event</strong> — event_name, subtitle, start_date, location<br>
+              <strong>States</strong> — state_code, city, year, status (visited/pending)<br>
+              <strong>Awards</strong> — year, event_name, location, award_name, award_winner
+            </p>
+          </div>
+          <div style="margin-top:24px;">
+            <button class="btn btn-outline" onclick="loadData()">Refresh Data Now</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="us-paths.js"></script>
+<script>
+// ═══════════════════════════════════════
+// GOOGLE SHEETS CONFIG
+// ═══════════════════════════════════════
+// Base published CSV URL — append &gid=XXXXX&single=true for each tab
+const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXZo0w3uYVd9YVD4kJ9SoAzE4zEXYwnojfE9e5nHSA_l3FqSNANPrJCJW9lu4NEYzXIdFY5sFbNlJE/pub';
+
+// Tab GIDs — you'll need to update these after creating the sheet
+// To find a tab's GID: open the sheet, click the tab, look at the URL for "gid=XXXXXXX"
+// Default first tab is always gid=0
+const SHEET_GIDS = {
+  event: 0,           // First tab: Event
+  states: 1704854682,       // Second tab: States — UPDATE THIS after creating the sheet
+  awards: 1622442896        // Third tab: Awards — UPDATE THIS after creating the sheet
+};
+
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+const STATE_NAMES = {
+  AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',
+  CT:'Connecticut',DE:'Delaware',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',
+  IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',
+  ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',
+  MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',
+  NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',
+  OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',
+  TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',
+  WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',DC:'Washington DC'
+};
+
+let siteData = {
+  event: { name: 'Missoulapalooza', subtitle: 'HMY 2026', startDate: '2026-03-19', location: 'Missoula, MT' },
+  visitedStates: {
+    AZ: { year: null, city: null, status: 'visited' },
+    CO: { year: null, city: null, status: 'visited' },
+    WI: { year: null, city: null, status: 'visited' },
+    IL: { year: null, city: null, status: 'visited' },
+    MT: { year: 2026, city: 'Missoula', status: 'pending' }
+  },
+  years: []
+};
+
+// ═══════════════════════════════════════
+// CSV PARSER (handles quoted fields, commas in values, etc.)
+// ═══════════════════════════════════════
+function parseCSV(text) {
+  const lines = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') {
+      if (inQuotes && text[i + 1] === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      lines.push(current);
+      current = '';
+    } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+      if (current.length > 0 || lines.length > 0) {
+        lines.push(current);
+        current = '';
+      }
+      if (lines.length > 0) {
+        // Yield row
+        const row = [...lines];
+        lines.length = 0;
+        if (!parseCSV._rows) parseCSV._rows = [];
+        parseCSV._rows.push(row);
+      }
+      // Skip \r\n
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+    } else {
+      current += ch;
+    }
+  }
+  // Last field
+  if (current.length > 0 || lines.length > 0) {
+    lines.push(current);
+    if (!parseCSV._rows) parseCSV._rows = [];
+    parseCSV._rows.push([...lines]);
+  }
+  const rows = parseCSV._rows || [];
+  parseCSV._rows = null;
+  return rows;
+}
+
+function csvToObjects(text) {
+  const rows = parseCSV(text.trim());
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+  return rows.slice(1)
+    .filter(row => row.some(cell => cell.trim() !== ''))
+    .map(row => {
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = (row[i] || '').trim(); });
+      return obj;
+    });
+}
+
+// ═══════════════════════════════════════
+// FETCH FROM GOOGLE SHEETS
+// ═══════════════════════════════════════
+function sheetURL(gid) {
+  return `${SHEET_BASE}?gid=${gid}&single=true&output=csv`;
+}
+
+async function fetchSheet(gid) {
+  const url = sheetURL(gid);
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`Sheet fetch failed: ${resp.status}`);
+  const text = await resp.text();
+  return csvToObjects(text);
+}
+
+async function loadData() {
+  const errors = [];
+
+  // ── Event tab ──
+  try {
+    if (SHEET_GIDS.event !== null) {
+      const rows = await fetchSheet(SHEET_GIDS.event);
+      if (rows.length > 0) {
+        const r = rows[0];
+        siteData.event = {
+          name: r.event_name || siteData.event.name,
+          subtitle: r.subtitle || siteData.event.subtitle,
+          startDate: r.start_date || siteData.event.startDate,
+          location: r.location || siteData.event.location
+        };
+      }
+    }
+  } catch (e) {
+    errors.push('Event: ' + e.message);
+  }
+
+  // ── States tab ──
+  try {
+    if (SHEET_GIDS.states !== null) {
+      const rows = await fetchSheet(SHEET_GIDS.states);
+      siteData.visitedStates = {};
+      rows.forEach(r => {
+        const code = (r.state_code || '').toUpperCase().trim();
+        if (code && STATE_NAMES[code]) {
+          siteData.visitedStates[code] = {
+            city: r.city || null,
+            year: r.year ? parseInt(r.year) : null,
+            status: (r.status || 'visited').toLowerCase().trim()
+          };
+        }
+      });
+    }
+  } catch (e) {
+    errors.push('States: ' + e.message);
+  }
+
+  // ── Awards tab ──
+  try {
+    if (SHEET_GIDS.awards !== null) {
+      const rows = await fetchSheet(SHEET_GIDS.awards);
+      // Group by year
+      const yearMap = {};
+      rows.forEach(r => {
+        const yr = parseInt(r.year);
+        if (!yr) return;
+        if (!yearMap[yr]) {
+          yearMap[yr] = {
+            year: yr,
+            eventName: r.event_name || '',
+            location: r.location || '',
+            awards: []
+          };
+        }
+        if (r.award_name) {
+          yearMap[yr].awards.push({
+            name: r.award_name,
+            winner: r.award_winner || ''
+          });
+        }
+      });
+      siteData.years = Object.values(yearMap);
+    }
+  } catch (e) {
+    errors.push('Awards: ' + e.message);
+  }
+
+  if (errors.length > 0) {
+    console.warn('Sheet load warnings:', errors);
+  }
+
+  initSite();
+}
+
+// ═══════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+function initSite() {
+  renderHome();
+  renderHistory();
+  renderMap();
+  startCountdown();
+}
+
+// ═══════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════
+function renderHome() {
+  document.getElementById('heroEventName').textContent = siteData.event.name;
+  const dateObj = new Date(siteData.event.startDate + 'T00:00:00');
+  const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('heroEventLocation').textContent = siteData.event.location + ' \u2014 ' + dateStr;
+}
+
+function startCountdown() {
+  function update() {
+    const target = new Date(siteData.event.startDate + 'T00:00:00').getTime();
+    const now = Date.now();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('cd-days').textContent = '00';
+      document.getElementById('cd-hours').textContent = '00';
+      document.getElementById('cd-min').textContent = '00';
+      document.getElementById('cd-sec').textContent = '00';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+    document.getElementById('cd-min').textContent = String(m).padStart(2, '0');
+    document.getElementById('cd-sec').textContent = String(s).padStart(2, '0');
+  }
+  update();
+  setInterval(update, 1000);
+}
+
+// ═══════════════════════════════════════
+// US MAP (SVG) — Pre-projected Albers USA paths from us-atlas
+// ═══════════════════════════════════════
+function renderMap() {
+  const mapEl = document.getElementById('mapContainer');
+  
+  if (typeof US_PATHS === 'undefined') {
+    mapEl.innerHTML = '<p style="text-align:center;color:var(--danger);padding:40px;">Map data not loaded. Make sure us-paths.js is in the same folder.</p>';
+    return;
+  }
+
+  let svg = `<svg viewBox="-10 0 975 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">`;
+
+  // Draw all state shapes
+  Object.entries(US_PATHS).forEach(([code, s]) => {
+    const fill = getStateFill(code);
+    const info = siteData.visitedStates[code];
+    const cls = info ? (info.status === 'visited' ? 'visited' : 'pending') : '';
+    svg += `<path d="${s.p}" data-state="${code}" class="state-path ${cls}" 
+      fill="${fill}" stroke="#8a9a88" stroke-width="0.8" stroke-linejoin="round"/>`;
+  });
+
+  // Add state abbreviation labels
+  Object.entries(US_PATHS).forEach(([code, s]) => {
+    const isSmall = ['DC','RI','CT','DE','NH','VT','MA','NJ','MD','HI'].includes(code);
+    const fontSize = isSmall ? 8 : 11;
+    const info = siteData.visitedStates[code];
+    const fillColor = info ? '#fff' : '#3a3a38';
+    const shadow = info ? 'text-shadow:0 1px 2px rgba(0,0,0,0.5)' : '';
+    svg += `<text x="${s.cx}" y="${s.cy}" text-anchor="middle" dominant-baseline="central" 
+      font-family="Source Serif 4, serif" font-size="${fontSize}" font-weight="700" 
+      fill="${fillColor}" pointer-events="none" style="${shadow}">${code}</text>`;
+  });
+
+  svg += `</svg>`;
+  mapEl.innerHTML = svg;
+
+  // Tooltips
+  const tooltip = document.getElementById('mapTooltip');
+  mapEl.querySelectorAll('.state-path').forEach(path => {
+    const code = path.dataset.state;
+    path.addEventListener('mouseenter', (e) => {
+      const info = siteData.visitedStates[code];
+      if (!info) return;
+      let text = STATE_NAMES[code];
+      if (info.city) text += ' \u2014 ' + info.city;
+      if (info.year) text += ' (' + info.year + ')';
+      text += info.status === 'pending' ? '  [Upcoming]' : '  [Visited]';
+      tooltip.textContent = text;
+      tooltip.style.display = 'block';
+    });
+    path.addEventListener('mousemove', (e) => {
+      const rect = mapEl.closest('.map-container').getBoundingClientRect();
+      tooltip.style.left = (e.clientX - rect.left - tooltip.offsetWidth / 2) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - tooltip.offsetHeight - 16) + 'px';
+    });
+    path.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+  });
+}
+
+function getStateFill(code) {
+  const info = siteData.visitedStates[code];
+  if (!info) return '#d1d5d0';
+  if (info.status === 'visited') return '#2d6b3f';
+  if (info.status === 'pending') return '#e8923a';
+  return '#d1d5d0';
+}
+
+// ═══════════════════════════════════════
+// HISTORY TAB
+// ═══════════════════════════════════════
+function renderHistory() {
+  const container = document.getElementById('historyList');
+  if (!siteData.years || siteData.years.length === 0) {
+    container.innerHTML = `<div class="no-data-msg">
+      <span class="icon">&#127942;</span>
+      No history recorded yet.<br>Add past years and awards in the Google Sheet.
+    </div>`;
+    return;
+  }
+
+  // Sort years descending
+  const sorted = [...siteData.years].sort((a, b) => b.year - a.year);
+  container.innerHTML = sorted.map(yr => `
+    <div class="year-card">
+      <div class="year-card-header">
+        <div class="year-card-title">${yr.eventName || 'Year ' + yr.year}</div>
+        <div class="year-card-location">${yr.location || ''} \u2014 ${yr.year}</div>
+      </div>
+      ${yr.awards && yr.awards.length > 0 ? `
+        <table class="awards-table">
+          <thead><tr><th>Award</th><th>Winner</th></tr></thead>
+          <tbody>
+            ${yr.awards.map(a => `
+              <tr>
+                <td class="award-name"><span class="award-icon">&#127942;</span>${a.name}</td>
+                <td class="award-winner">${a.winner}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : '<p style="padding:20px;color:var(--text-light);">No awards recorded yet.</p>'}
+    </div>
+  `).join('');
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════
+loadData();
+</script>
+</body>
+</html>
