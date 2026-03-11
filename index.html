@@ -705,6 +705,60 @@ body {
   opacity: 1;
 }
 
+/* ── MH AWARD SHOWS TAB ── */
+.shows-section {
+  padding: 32px 0 60px;
+}
+
+.shows-year-picker {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.show-year-btn {
+  padding: 12px 28px;
+  border: 2px solid var(--sand);
+  border-radius: 10px;
+  background: white;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--forest-deep);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.show-year-btn:hover {
+  border-color: var(--forest);
+  background: var(--sand-pale);
+}
+
+.show-year-btn.active {
+  background: var(--forest);
+  color: white;
+  border-color: var(--forest);
+}
+
+.shows-viewer {
+  background: white;
+  border-radius: 12px;
+  border: 2px solid var(--sand);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  min-height: 400px;
+}
+
+.shows-viewer iframe {
+  width: 100%;
+  height: 80vh;
+  min-height: 500px;
+  border: none;
+  display: block;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .nav-inner {
@@ -727,6 +781,8 @@ body {
   .year-card-header { flex-direction: column; gap: 4px; }
   .admin-award-row { flex-direction: column; }
   .admin-award-row input { width: 100%; }
+  .shows-viewer iframe { height: 60vh; min-height: 350px; }
+  .show-year-btn { padding: 10px 20px; font-size: 1rem; }
 }
 </style>
 </head>
@@ -738,6 +794,7 @@ body {
     <nav class="nav-tabs">
       <button class="nav-tab active" data-tab="home">Home</button>
       <button class="nav-tab" data-tab="history">Past History Makers</button>
+      <button class="nav-tab" data-tab="shows">MH Award Shows</button>
     </nav>
   </div>
 </header>
@@ -802,6 +859,21 @@ body {
       <h2 class="section-heading">Past History Makers</h2>
       <p class="section-sub">Every year, every award, every legend</p>
       <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ MH AWARD SHOWS TAB ═══════ -->
+  <div id="tab-shows" class="tab-panel">
+    <div class="shows-section">
+      <h2 class="section-heading">MH Award Shows</h2>
+      <p class="section-sub">Relive the ceremony — select a year to view the slideshow</p>
+      <div class="shows-year-picker" id="showsYearPicker"></div>
+      <div class="shows-viewer" id="showsViewer">
+        <p class="no-data-msg" style="padding:40px;">
+          <span class="icon">&#127916;</span>
+          Select a year above to view the award show.
+        </p>
+      </div>
     </div>
   </div>
 
@@ -1172,6 +1244,43 @@ function renderHistory() {
     </div>
   `).join('');
 }
+
+// ═══════════════════════════════════════
+// MH AWARD SHOWS
+// ═══════════════════════════════════════
+// Google Drive file IDs for each year's award show PDF
+const SHOW_FILES = {
+  2025: '1NFXvEeDwnHsrmc3ipWWVKtLIpxpegBx_',
+  2024: '1aMkGrQ2B-n7tISrGIdQZp6X4SmAqXVEq',
+  2023: '1fB56PZb7iax9MOa8eiMKaw-thicNCiKH',
+  2022: '1ZnoDgoHF4YFJLkWrPskH9mBonwyZ2N8J'
+};
+
+function renderShows() {
+  const picker = document.getElementById('showsYearPicker');
+  picker.innerHTML = Object.keys(SHOW_FILES).sort((a, b) => b - a).map(yr =>
+    `<button class="show-year-btn" data-year="${yr}" onclick="loadShow(${yr})">${yr}</button>`
+  ).join('');
+}
+
+function loadShow(year) {
+  document.querySelectorAll('.show-year-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.year) === year);
+  });
+
+  const viewer = document.getElementById('showsViewer');
+  const fileId = SHOW_FILES[year];
+  if (!fileId) {
+    viewer.innerHTML = '<p class="no-data-msg">No slideshow available for this year.</p>';
+    return;
+  }
+
+  // Google Drive embedded PDF viewer
+  const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+  viewer.innerHTML = `<iframe src="${embedUrl}" title="Making History Awards Show ${year}" allow="autoplay"></iframe>`;
+}
+
+renderShows();
 
 // Toast
 function showToast(msg) {
