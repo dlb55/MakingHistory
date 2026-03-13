@@ -917,11 +917,11 @@ const STATE_NAMES = {
 let siteData = {
   event: { name: 'Missoulapalooza', subtitle: 'HMY 2026', startDate: '2026-03-19', location: 'Missoula, MT' },
   visitedStates: {
-    AZ: { year: null, city: null, status: 'visited' },
-    CO: { year: null, city: null, status: 'visited' },
-    WI: { year: null, city: null, status: 'visited' },
-    IL: { year: null, city: null, status: 'visited' },
-    MT: { year: 2026, city: 'Missoula', status: 'pending' }
+    IL: { city: 'Chicago', visit: 2022, awardYr: 2021, status: 'visited' },
+    WI: { city: 'Door County', visit: 2023, awardYr: 2022, status: 'visited' },
+    AZ: { city: 'Scottsdale', visit: 2024, awardYr: 2023, status: 'visited' },
+    CO: { city: 'Denver', visit: 2025, awardYr: 2024, status: 'visited' },
+    MT: { city: 'Missoula', visit: 2026, awardYr: 2025, status: 'pending' }
   },
   years: []
 };
@@ -1033,7 +1033,8 @@ async function loadData() {
         if (code && STATE_NAMES[code]) {
           siteData.visitedStates[code] = {
             city: r.city || null,
-            year: r.year ? parseInt(r.year) : null,
+            visit: r.visit ? parseInt(r.visit) : null,
+            awardYr: r.award_yr ? parseInt(r.award_yr) : null,
             status: (r.status || 'visited').toLowerCase().trim()
           };
         }
@@ -1183,8 +1184,15 @@ function renderMap() {
       if (!info) return;
       let text = STATE_NAMES[code];
       if (info.city) text += ' \u2014 ' + info.city;
-      if (info.year) text += ' (' + info.year + ')';
-      text += info.status === 'pending' ? '  [Upcoming]' : '  [Visited]';
+      if (info.status === 'pending') {
+        if (info.visit) text += ' \u2014 Trip: ' + info.visit;
+        text += '  [Upcoming]';
+      } else {
+        const parts = [];
+        if (info.visit) parts.push('Trip: ' + info.visit);
+        if (info.awardYr) parts.push('Awards: ' + info.awardYr);
+        if (parts.length) text += ' (' + parts.join(' | ') + ')';
+      }
       tooltip.textContent = text;
       tooltip.style.display = 'block';
     });
@@ -1275,9 +1283,10 @@ function loadShow(year) {
     return;
   }
 
-  // Google Drive embedded PDF viewer
-  const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-  viewer.innerHTML = `<iframe src="${embedUrl}" title="Making History Awards Show ${year}" allow="autoplay"></iframe>`;
+  // Google Docs embedded viewer — works without sign-in
+  const driveUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+  const embedUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(driveUrl)}`;
+  viewer.innerHTML = `<iframe src="${embedUrl}" title="Making History Awards Show ${year}" allow="autoplay" style="background:#f5f5f5;"></iframe>`;
 }
 
 renderShows();
