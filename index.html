@@ -1230,11 +1230,14 @@ function renderHistory() {
 
   // Sort years descending
   const sorted = [...siteData.years].sort((a, b) => b.year - a.year);
-  container.innerHTML = sorted.map(yr => `
+  container.innerHTML = sorted.map(yr => {
+    const visitYear = yr.year;
+    const awardYear = yr.year - 1;
+    return `
     <div class="year-card">
       <div class="year-card-header">
-        <div class="year-card-title">${yr.eventName || 'Year ' + yr.year}</div>
-        <div class="year-card-location">${yr.location || ''} \u2014 ${yr.year}</div>
+        <div class="year-card-title">${yr.eventName || 'Year ' + visitYear}</div>
+        <div class="year-card-location">${yr.location || ''} &mdash; Visit Year: ${visitYear} | Award Year: ${awardYear}</div>
       </div>
       ${yr.awards && yr.awards.length > 0 ? `
         <table class="awards-table">
@@ -1249,8 +1252,8 @@ function renderHistory() {
           </tbody>
         </table>
       ` : '<p style="padding:20px;color:var(--text-light);">No awards recorded yet.</p>'}
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════
